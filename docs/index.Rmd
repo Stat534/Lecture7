@@ -1,0 +1,140 @@
+---
+title: "Lecture 7: Point Level Models - Classical Model Fitting"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    center: true
+    transition: none
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(mnormt)
+```
+
+# Class Intro
+
+## Intro Questions 
+- What are some basic guidelines for EDA for point referenced data?
+- For Today:
+    - Data Simulation
+    - Classical Model Fitting
+
+
+# Model Fitting
+
+## Simulating Spatial Process
+
+- Soon we will look at fitting models for spatial point data
+- Simulating data gives a deeper understanding of the model fitting process
+- Simulate a mean-zero, isotropic spatial process with a spherical covariance function
+
+## Simulating Spatial Process
+
+1. Construct spatial locations
+2. Calculate distances
+3. Define covariance function and set parameters
+4. Sample realization of the process
+5. Visualize realization of spatial process
+
+## 1. Construct Spatial Locations
+
+```{r}
+set.seed(01252019)
+num.locations <- 50
+coords <- data.frame(x = runif(num.locations), y = runif(num.locations))
+coords %>% ggplot(aes(x=x,y=y)) + geom_point() + ggtitle('Hypothetical Sampling Locations') + xlim(0,1) + ylim(0,1)
+```
+
+## 2. Calculate Distances
+
+```{r, echo = T}
+dist.mat <- dist(coords, diag = T, upper = T) %>% as.matrix()
+```
+
+## 3. Define Covariance Function and Set Parameters
+- Use spherical covariance with no nugget: 
+$$C(d) = \begin{cases}
+0 \text{ if } d \geq \frac{1}{\phi} \\
+\sigma^2 \left[1 - \frac{3}{2}\phi d + \frac{1}{2} (\phi d)^3 \right] \; \; \text{ if } 0 \leq d \leq \frac{1}{\phi}
+\end{cases}$$
+
+```{r}
+sigma.sq <- 1
+phi <- 2
+Sigma <- sigma.sq * (matrix(1,num.locations,num.locations) - 1.5 * phi * dist.mat + .5 * (phi * dist.mat)^3) 
+Sigma[dist.mat > 1/phi] <- 0
+```
+
+
+## 4. Sample realization of the process
+- This requires a distributional assumption, we will use the Gaussian distribution
+
+```{r}
+Y <- rmnorm(n=1, mean = 0, varcov = Sigma)
+```
+
+- What about the rest of the locations on the map?
+
+## 5. Vizualize Spatial Process
+
+```{r}
+coords %>% mutate(Y = Y) %>% ggplot(aes(x=x,y=y)) + geom_point(aes(color=Y), size=2) + ggtitle(label = 'Simulated Spatial Process', subtitle = 'Spherical Covariance: sigma.sq = 1, phi = 2') +  xlim(0,1) + ylim(0,1) +   scale_colour_gradient2() + theme_dark()
+```
+
+## Extra: Gridded Spatial Process
+
+```{r}
+dim.grid <- 10
+grid.coords <- data.frame(x.grid = rep(seq(.05, .95, length.out=dim.grid), dim.grid),
+  y.grid = rep(seq(.05, .95, length.out = dim.grid), each = dim.grid))
+
+dist.grid <- dist(grid.coords, diag = T, upper = T) %>% as.matrix()
+
+sigma.sq <- 1
+phi <- 2
+Sigma <- sigma.sq * (matrix(1,dim.grid^2,dim.grid^2) - 1.5 * phi * dist.grid + .5 * (phi * dist.grid)^3) 
+Sigma[dist.grid > 1/phi] <- 0
+
+Y <- rmnorm(n=1, mean = 0, varcov = Sigma)
+
+grid.coords %>% mutate(Y = Y) %>% ggplot(aes(x=x.grid,y=y.grid)) + geom_point(aes(color=Y), size=3) + ggtitle('Simulated Spatial Process', subtitle = 'Spherical Covariance: sigma.sq = 1, phi = 2') + xlim(0,1) + ylim(0,1) +   scale_colour_gradient2() + theme_dark()
+
+```
+
+## Extra: Gridded Spatial Process
+
+```{r}
+dim.grid <- 50
+grid.coords <- data.frame(x.grid = rep(seq(.05, .95, length.out=dim.grid), dim.grid),
+  y.grid = rep(seq(.05, .95, length.out = dim.grid), each = dim.grid))
+
+dist.grid <- dist(grid.coords, diag = T, upper = T) %>% as.matrix()
+
+sigma.sq <- 1
+phi <- 2
+Sigma <- sigma.sq * (matrix(1,dim.grid^2,dim.grid^2) - 1.5 * phi * dist.grid + .5 * (phi * dist.grid)^3) 
+Sigma[dist.grid > 1/phi] <- 0
+
+Y <- rmnorm(n=1, mean = 0, varcov = Sigma)
+
+grid.coords %>% mutate(Y = Y) %>% ggplot(aes(x=x.grid,y=y.grid)) + geom_point(aes(color=Y), size=3) + ggtitle('Simulated Spatial Process', subtitle = 'Spherical Covariance: sigma.sq = 1, phi = 2') + xlim(0,1) + ylim(0,1) +   scale_colour_gradient2() + theme_dark()
+```
+
+
+## Simulated Spatial Process: Exercise
+
+How does the spatial process change with:
+
+- another draw with same parameters?
+- a different value of $\phi$
+- a different value of $\sigma^2$
+- adding a nugget term, $\tau^2$
+
+## Additional Resources
+- [Meuse Data Tutorial](https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf)
+- [Textbook Data Sets](https://www.counterpointstat.com/hierarchical-modeling-and-analysis-for-spatial-data.html/)
