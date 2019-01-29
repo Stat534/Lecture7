@@ -1,5 +1,5 @@
 ---
-title: "Lecture 7: Point Level Models - Classical Model Fitting"
+title: "Lecture 7: Point Level Models - Simulation and Model Fitting"
 output:
   revealjs::revealjs_presentation:
     theme: night
@@ -25,7 +25,7 @@ library(mnormt)
     - Classical Model Fitting
 
 
-# Model Fitting
+# Model Simulation
 
 ## Simulating Spatial Process
 
@@ -134,6 +134,17 @@ How does the spatial process change with:
 - a different value of $\phi$
 - a different value of $\sigma^2$
 - adding a nugget term, $\tau^2$
+
+# Model Fitting
+
+## Classical Model Fitting
+
+- The classical approach to spatial prediction is rooted in the minimum the mean-squared error.
+- This approach is often referred to as *Kriging* in honor of D.G. Krige a South African mining engineer.
+- As a result of Krige's work (along with others), point-level spatial analysis and geostatistical analysis are used interchangeably.
+
+## Model Fitting Framework
+
 
 ## Additional Resources
 - [Meuse Data Tutorial](https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf)

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title>Lecture 7: Point Level Models - Classical Model Fitting</title>
+  <title>Lecture 7: Point Level Models - Simulation and Model Fitting</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1828,7 +1828,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 <section>
-    <h1 class="title">Lecture 7: Point Level Models - Classical Model Fitting</h1>
+    <h1 class="title">Lecture 7: Point Level Models - Simulation and Model Fitting</h1>
 </section>
 
 <section><section id="class-intro" class="title-slide slide level1"><h1>Class Intro</h1></section><section id="intro-questions" class="slide level2">
@@ -1842,7 +1842,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul></li>
 </ul>
 </section></section>
-<section><section id="model-fitting" class="title-slide slide level1"><h1>Model Fitting</h1></section><section id="simulating-spatial-process" class="slide level2">
+<section><section id="model-simulation" class="title-slide slide level1"><h1>Model Simulation</h1></section><section id="simulating-spatial-process" class="slide level2">
 <h2>Simulating Spatial Process</h2>
 <ul>
 <li class="fragment">Soon we will look at fitting models for spatial point data</li>
@@ -1896,6 +1896,16 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li class="fragment">a different value of <span class="math inline">\(\sigma^2\)</span></li>
 <li class="fragment">adding a nugget term, <span class="math inline">\(\tau^2\)</span></li>
 </ul>
+</section></section>
+<section><section id="model-fitting" class="title-slide slide level1"><h1>Model Fitting</h1></section><section id="classical-model-fitting" class="slide level2">
+<h2>Classical Model Fitting</h2>
+<ul>
+<li class="fragment">The classical approach to spatial prediction is rooted in the minimum the mean-squared error.</li>
+<li class="fragment">This approach is often referred to as <em>Kriging</em> in honor of D.G. Krige a South African mining engineer.</li>
+<li class="fragment">As a result of Krige’s work (along with others), point-level spatial analysis and geostatistical analysis are used interchangeably.</li>
+</ul>
+</section><section id="model-fitting-framework" class="slide level2">
+<h2>Model Fitting Framework</h2>
 </section><section id="additional-resources" class="slide level2">
 <h2>Additional Resources</h2>
 <ul>
